@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # OpenCart
 
 ## Overview
@@ -181,3 +182,6 @@ To receive developer notifications about release information, sign up to the new
 - [Newsletter](https://newsletter.opencart.com/h/r/B660EBBE4980C85C)
 - [Discussions](https://github.com/opencart/opencart/discussions)
 - [Chat] (https://teams.live.com/l/community/FEAMBRGMM2X2wz82gI)
+=======
+# opencart_chatbot
+>>>>>>> 1a82d75e6dd9f6a07924065cbfeef7e4f78e1a7b
