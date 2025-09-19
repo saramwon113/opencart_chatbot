@@ -18,5 +18,3 @@ require_once(DIR_SYSTEM . 'startup.php');
 
 // Framework
 require_once(DIR_SYSTEM . 'framework.php');
-
-print_r($_GET);

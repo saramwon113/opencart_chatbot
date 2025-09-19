@@ -56,6 +56,588 @@ Please donate via PayPal to donate@opencart.com
 </footer>
 </div> <!-- #container .d-flex //-->
 {{ cookie }}
+
+<!-- Chatbot Widget -->
+<div id="chatbot-widget" class="chatbot-widget">
+  <div id="chatbot-toggle" class="chatbot-toggle">
+    <i class="fa-solid fa-comments"></i>
+    <span class="chatbot-badge" id="chatbot-badge" style="display: none;">1</span>
+  </div>
+  
+  <div id="chatbot-container" class="chatbot-container" style="display: none;">
+    <div class="chatbot-header">
+      <div class="chatbot-title">
+        <i class="fa-solid fa-robot"></i>
+        <span>Trợ lý AI</span>
+      </div>
+      <div class="chatbot-close" id="chatbot-close">
+        <i class="fa-solid fa-times"></i>
+      </div>
+    </div>
+    
+    <div class="chatbot-messages" id="chatbot-messages">
+      <div class="chatbot-message chatbot-bot-message">
+        <div class="chatbot-avatar">
+          <i class="fa-solid fa-robot"></i>
+        </div>
+        <div class="chatbot-text">
+          Xin chào! Tôi có thể giúp bạn tìm kiếm sản phẩm, kiểm tra giá, danh mục và tình trạng tồn kho. Bạn muốn biết gì? 🤖
+        </div>
+      </div>
+    </div>
+    
+    <div class="chatbot-input-container">
+      <div class="chatbot-input-wrapper">
+        <input type="text" id="chatbot-input" placeholder="Nhập câu hỏi của bạn..." autocomplete="off">
+        <button id="chatbot-send" class="chatbot-send-btn">
+          <i class="fa-solid fa-paper-plane"></i>
+        </button>
+      </div>
+      <div class="chatbot-suggestions">
+        <button class="chatbot-suggestion" data-message="danh mục">📁 Danh mục</button>
+        <button class="chatbot-suggestion" data-message="tìm iPhone">🔍 Tìm iPhone</button>
+        <button class="chatbot-suggestion" data-message="giá macbook">💰 Giá MacBook</button>
+        <button class="chatbot-suggestion" data-message="so sánh iPhone 13 vs iPhone 14">📊 So sánh</button>
+        <button class="chatbot-suggestion" data-message="khuyến mãi">🔥 Khuyến mãi</button>
+        <button class="chatbot-suggestion" data-message="giúp đỡ">❓ Trợ giúp</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.chatbot-widget {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.chatbot-toggle {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.chatbot-toggle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 25px rgba(0,0,0,0.2);
+}
+
+.chatbot-toggle i {
+  color: white;
+  font-size: 24px;
+}
+
+.chatbot-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #ff4757;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.chatbot-container {
+  position: absolute;
+  bottom: 80px;
+  right: 0;
+  width: 350px;
+  height: 500px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.chatbot-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.chatbot-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+}
+
+.chatbot-close {
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  transition: background 0.2s ease;
+}
+
+.chatbot-close:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+.chatbot-messages {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  background: #f8f9fa;
+}
+
+.chatbot-message {
+  display: flex;
+  margin-bottom: 15px;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.chatbot-bot-message {
+  justify-content: flex-start;
+}
+
+.chatbot-user-message {
+  justify-content: flex-end;
+}
+
+.chatbot-avatar {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+.chatbot-user-message .chatbot-avatar {
+  background: #28a745;
+  margin-right: 0;
+  margin-left: 10px;
+  order: 2;
+}
+
+.chatbot-text {
+  background: white;
+  padding: 12px 16px;
+  border-radius: 18px;
+  max-width: 80%;
+  word-wrap: break-word;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  line-height: 1.4;
+}
+
+.chatbot-user-message .chatbot-text {
+  background: #007bff;
+  color: white;
+}
+
+.chatbot-input-container {
+  padding: 15px 20px;
+  background: white;
+  border-top: 1px solid #e9ecef;
+}
+
+.chatbot-input-wrapper {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.chatbot-input-wrapper input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid #ddd;
+  border-radius: 25px;
+  outline: none;
+  font-size: 14px;
+  transition: border-color 0.2s ease;
+}
+
+.chatbot-input-wrapper input:focus {
+  border-color: #667eea;
+}
+
+.chatbot-send-btn {
+  width: 45px;
+  height: 45px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.chatbot-send-btn:hover {
+  transform: scale(1.05);
+}
+
+.chatbot-suggestions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.chatbot-suggestion {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.chatbot-suggestion:hover {
+  background: #667eea;
+  color: white;
+  border-color: #667eea;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .chatbot-container {
+    width: calc(100vw - 40px);
+    right: -10px;
+  }
+  
+  .chatbot-widget {
+    right: 10px;
+  }
+}
+
+/* Loading animation */
+.chatbot-typing {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.chatbot-typing span {
+  width: 8px;
+  height: 8px;
+  background: #667eea;
+  border-radius: 50%;
+  animation: typing 1.4s infinite ease-in-out;
+}
+
+.chatbot-typing span:nth-child(1) { animation-delay: -0.32s; }
+.chatbot-typing span:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes typing {
+  0%, 80%, 100% { transform: scale(0); }
+  40% { transform: scale(1); }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const chatbotToggle = document.getElementById('chatbot-toggle');
+  const chatbotContainer = document.getElementById('chatbot-container');
+  const chatbotClose = document.getElementById('chatbot-close');
+  const chatbotInput = document.getElementById('chatbot-input');
+  const chatbotSend = document.getElementById('chatbot-send');
+  const chatbotMessages = document.getElementById('chatbot-messages');
+  const chatbotBadge = document.getElementById('chatbot-badge');
+  const suggestions = document.querySelectorAll('.chatbot-suggestion');
+  
+  let isOpen = false;
+  let messageCount = 0;
+  
+  // Toggle chatbot
+  chatbotToggle.addEventListener('click', function() {
+    if (isOpen) {
+      chatbotContainer.style.display = 'none';
+      isOpen = false;
+    } else {
+      chatbotContainer.style.display = 'flex';
+      isOpen = true;
+      chatbotBadge.style.display = 'none';
+      messageCount = 0;
+      chatbotInput.focus();
+    }
+  });
+  
+  // Close chatbot
+  chatbotClose.addEventListener('click', function() {
+    chatbotContainer.style.display = 'none';
+    isOpen = false;
+  });
+  
+  // Send message
+  function sendMessage() {
+    const message = chatbotInput.value.trim();
+    if (!message) return;
+    
+    // Add user message
+    addMessage(message, 'user');
+    chatbotInput.value = '';
+    
+    // Show typing indicator
+    showTyping();
+    
+    // Send to API via MVC route (fallback to legacy)
+    fetch('index.php?route=common/chatbot', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: 'message=' + encodeURIComponent(message)
+    })
+    .then(response => response.json())
+    .then(data => {
+      hideTyping();
+      if (data.response) {
+        addMessage(data.response, 'bot');
+      } else if (data.error) {
+        // Fallback to legacy endpoint
+        fetch('{{ base }}chatbot.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: 'message=' + encodeURIComponent(message)
+        })
+        .then(r => r.json())
+        .then(d2 => {
+          if (d2.response) {
+            addMessage(d2.response, 'bot');
+          } else {
+            addMessage('Xin lỗi, có lỗi xảy ra. Vui lòng thử lại.', 'bot');
+          }
+        })
+        .catch(() => addMessage('Xin lỗi, có lỗi xảy ra. Vui lòng thử lại.', 'bot'));
+      }
+    })
+    .catch(error => {
+      hideTyping();
+      // Fallback to legacy endpoint
+      fetch('{{ base }}chatbot.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'message=' + encodeURIComponent(message)
+      })
+      .then(r => r.json())
+      .then(d2 => {
+        if (d2.response) {
+          addMessage(d2.response, 'bot');
+        } else {
+          addMessage('Xin lỗi, không thể kết nối. Vui lòng thử lại.', 'bot');
+        }
+      })
+      .catch(() => addMessage('Xin lỗi, không thể kết nối. Vui lòng thử lại.', 'bot'));
+    });
+  }
+  
+  // Add message to chat
+  function addMessage(text, sender) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `chatbot-message chatbot-${sender}-message`;
+    
+    const avatar = document.createElement('div');
+    avatar.className = 'chatbot-avatar';
+    avatar.innerHTML = sender === 'bot' ? '<i class="fa-solid fa-robot"></i>' : '<i class="fa-solid fa-user"></i>';
+    
+    const textDiv = document.createElement('div');
+    textDiv.className = 'chatbot-text';
+    textDiv.innerHTML = formatMessage(text);
+    
+    messageDiv.appendChild(avatar);
+    messageDiv.appendChild(textDiv);
+    
+    chatbotMessages.appendChild(messageDiv);
+    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+    
+    if (sender === 'user' && !isOpen) {
+      messageCount++;
+      chatbotBadge.textContent = messageCount;
+      chatbotBadge.style.display = 'flex';
+    }
+  }
+  
+  // Format message with line breaks and links
+  function formatMessage(text) {
+    // First, clean up URLs by removing any trailing whitespace or line breaks
+    text = text.replace(/(https?:\/\/[^\s]+)\s*\n*/g, '$1');
+    
+    return text
+      .replace(/\n/g, '<br>')
+      .replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" style="color: #007bff; text-decoration: none;">$1<\/a>')
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1<\/strong>');
+  }
+  
+  // Show typing indicator
+  function showTyping() {
+    const typingDiv = document.createElement('div');
+    typingDiv.className = 'chatbot-message chatbot-bot-message';
+    typingDiv.id = 'typing-indicator';
+    
+    const avatar = document.createElement('div');
+    avatar.className = 'chatbot-avatar';
+    avatar.innerHTML = '<i class="fa-solid fa-robot"></i>';
+    
+    const textDiv = document.createElement('div');
+    textDiv.className = 'chatbot-text chatbot-typing';
+    textDiv.innerHTML = '<span></span><span></span><span></span>';
+    
+    typingDiv.appendChild(avatar);
+    typingDiv.appendChild(textDiv);
+    
+    chatbotMessages.appendChild(typingDiv);
+    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+  }
+  
+  // Hide typing indicator
+  function hideTyping() {
+    const typingIndicator = document.getElementById('typing-indicator');
+    if (typingIndicator) {
+      typingIndicator.remove();
+    }
+  }
+  
+  // Event listeners
+  chatbotSend.addEventListener('click', sendMessage);
+  
+  chatbotInput.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      sendMessage();
+    }
+  });
+  
+  // Suggestion buttons
+  suggestions.forEach(button => {
+    button.addEventListener('click', function() {
+      const message = this.getAttribute('data-message');
+      chatbotInput.value = message;
+      sendMessage();
+    });
+  });
+  
+  // Load dynamic quick replies from MVC route (fallback to legacy if needed)
+  fetch('index.php?route=common/chatbot&suggest=1')
+    .then(r => r.json())
+    .then(data => {
+      if (!data || !data.suggestions) return;
+      const box = document.querySelector('.chatbot-suggestions');
+      if (!box) return;
+      box.innerHTML = '';
+      data.suggestions.forEach(item => {
+        const b = document.createElement('button');
+        b.className = 'chatbot-suggestion';
+        b.textContent = item.label;
+        b.setAttribute('data-message', item.message);
+        b.addEventListener('click', () => { chatbotInput.value = item.message; sendMessage(); });
+        box.appendChild(b);
+      });
+    })
+    .catch(() => {
+      // Fallback to legacy endpoint
+      fetch('{{ base }}chatbot.php?suggest=1')
+        .then(r => r.json())
+        .then(data => {
+          if (!data || !data.suggestions) return;
+          const box = document.querySelector('.chatbot-suggestions');
+          if (!box) return;
+          box.innerHTML = '';
+          data.suggestions.forEach(item => {
+            const b = document.createElement('button');
+            b.className = 'chatbot-suggestion';
+            b.textContent = item.label;
+            b.setAttribute('data-message', item.message);
+            b.addEventListener('click', () => { chatbotInput.value = item.message; sendMessage(); });
+            box.appendChild(b);
+          });
+        })
+        .catch(() => {});
+    });
+  
+  // Quick reply injection based on bot response
+  const observer = new MutationObserver(() => {
+    const last = chatbotMessages.lastElementChild;
+    if (!last) return;
+    const textEl = last.querySelector('.chatbot-text');
+    if (!textEl) return;
+    const text = textEl.innerText || '';
+    const strip = (s) => s.toLowerCase();
+    const box = document.querySelector('.chatbot-suggestions');
+    if (!box) return;
+    // Reset to default
+    box.innerHTML = '';
+    const add = (label, msg) => {
+      const b = document.createElement('button');
+      b.className = 'chatbot-suggestion';
+      b.textContent = label;
+      b.setAttribute('data-message', msg);
+      b.addEventListener('click', () => { chatbotInput.value = msg; sendMessage(); });
+      box.appendChild(b);
+    };
+    if (strip(text).includes('danh mục')) {
+      add('📁 Danh mục', 'danh mục');
+      add('1️⃣ Danh mục #1', '1');
+      add('2️⃣ Danh mục #2', '2');
+      add('🔍 Tìm iPhone', 'tìm iPhone');
+    } else if (strip(text).includes('không tìm thấy') || strip(text).includes('không có sản phẩm')) {
+      add('🔁 Thử lại tìm kiếm', 'tìm sản phẩm');
+      add('📁 Danh mục', 'danh mục');
+      add('📊 So sánh', 'so sánh iPhone 13 vs iPhone 14');
+    } else {
+      add('📁 Danh mục', 'danh mục');
+      add('🔍 Tìm sản phẩm', 'tìm sản phẩm');
+      add('💰 Xem giá', 'giá');
+      add('📊 So sánh', 'so sánh iPhone 13 vs iPhone 14');
+    }
+  });
+  observer.observe(chatbotMessages, { childList: true });
+  
+  // Auto-focus input when opened
+  chatbotToggle.addEventListener('click', function() {
+    if (!isOpen) {
+      setTimeout(() => {
+        chatbotInput.focus();
+      }, 300);
+    }
+  });
+});
+</script>
+
 <script src="{{ bootstrap }}" type="text/javascript"></script>
 {% for script in scripts %}
   <script src="{{ script.href }}" type="text/javascript"></script>
